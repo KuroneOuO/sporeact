@@ -1,8 +1,10 @@
 import React, { useState, useRef } from 'react';
 import Slider from 'react-slick';
 import Sidebar from './componentes/menu/Sidebar';
+import Albumes from './componentes/menu/Albumes';
+
 import './App.css';
-import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 import beele from './canciones/beele.mp3';
@@ -10,6 +12,7 @@ import blessd from './canciones/blessd.mp3';
 import kg from './canciones/kg.mp3';
 import mora from './canciones/mora.mp3';
 import mt from './canciones/mt.mp3';
+
 
 const trendingSongs = [
   {
@@ -60,6 +63,7 @@ const favoriteArtists = [
 
 function App() {
   const [currentSong, setCurrentSong] = useState(null);
+  const [mostrarAlbumes, setMostrarAlbumes] = useState(false);
   const audioRef = useRef(null);
 
   const handlePlay = (song) => {
@@ -96,35 +100,45 @@ function App() {
 
   return (
     <div className="app-container">
-      <Sidebar />
-      <main className="main-view">
-        <section className="card-section">
-          <h3>Canciones en tendencia</h3>
-          <Slider {...settings}>
-            {trendingSongs.map((song, index) => (
-              <div className="card" key={index} onClick={() => handlePlay(song)}>
-                <img src={song.img} alt={song.title} />
-                <div className="card-title">{song.title}</div>
-              </div>
-            ))}
-          </Slider>
-        </section>
+      <div className="sidebar">
+        <button onClick={() => setMostrarAlbumes(false)}>Inicio</button>
+        <button onClick={() => setMostrarAlbumes(true)}>Tu Biblioteca</button>
+      </div>
 
-        <section className="artists-section">
-          <div className="artists-header">
-            <h3>Tus artistas favoritos</h3>
-            <span className="show-all">Mostrar todos</span>
-          </div>
-          <div className="artists-container">
-            {favoriteArtists.map((artist, index) => (
-              <div className="artist-card" key={index}>
-                <img src={artist.img} alt={artist.name} />
-                <div className="artist-name">{artist.name}</div>
-                <div className="artist-role">Artista</div>
+      <main className="main-view">
+        {mostrarAlbumes ? (
+          <Albumes />
+        ) : (
+          <>
+            <section className="card-section">
+              <h3>Canciones en tendencia</h3>
+              <Slider {...settings}>
+                {trendingSongs.map((song, index) => (
+                  <div className="card" key={index} onClick={() => handlePlay(song)}>
+                    <img src={song.img} alt={song.title} />
+                    <div className="card-title">{song.title}</div>
+                  </div>
+                ))}
+              </Slider>
+            </section>
+
+            <section className="artists-section">
+              <div className="artists-header">
+                <h3>Tus artistas favoritos</h3>
+                <span className="show-all">Mostrar todos</span>
               </div>
-            ))}
-          </div>
-        </section>
+              <div className="artists-container">
+                {favoriteArtists.map((artist, index) => (
+                  <div className="artist-card" key={index}>
+                    <img src={artist.img} alt={artist.name} />
+                    <div className="artist-name">{artist.name}</div>
+                    <div className="artist-role">Artista</div>
+                  </div>
+                ))}
+              </div>
+            </section>
+          </>
+        )}
       </main>
 
       {currentSong && (
