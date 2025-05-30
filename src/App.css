@@ -1,38 +1,19 @@
 @import "slick-carousel/slick/slick.css";
 @import "slick-carousel/slick/slick-theme.css";
 
-
 .app-container {
   display: flex;
   height: 100vh;
   font-family: 'Helvetica Neue', sans-serif;
   background-color: #121212;
   color: white;
+  overflow: hidden;
 }
 
 .sidebar {
   width: 240px;
   background-color: #000000;
   padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.sidebar h2 {
-  color: white;
-  font-size: 24px;
-  margin-bottom: 20px;
-}
-
-.sidebar ul {
-  list-style: none;
-  padding: 0;
-}
-
-.sidebar ul li {
-  margin: 10px 0;
-  cursor: pointer;
 }
 
 .main-view {
@@ -40,21 +21,40 @@
   padding: 20px;
   background-color: #121212;
   overflow-y: auto;
+  height: 100vh;
+  padding-bottom: 120px; /* Espacio para player */
+  display: flex;
+  flex-direction: column;
+  gap: 0;
 }
 
 .card-section {
-  margin-top: 20px;
+  margin: 0 !important;
+  padding: 0 !important;
+  flex-shrink: 0;
 }
 
-.card-section h3 {
+.card-section h3,
+.artists-header h3 {
   font-size: 20px;
   margin-bottom: 10px;
 }
 
-.card-container {
+.card-scroll-container {
   display: flex;
-  gap: 15px;
+  gap: 16px;
   overflow-x: auto;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+
+.card-scroll-container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.card-scroll-container::-webkit-scrollbar-thumb {
+  background: #444;
+  border-radius: 4px;
 }
 
 .card {
@@ -65,7 +65,7 @@
   min-width: 160px;
   cursor: pointer;
   text-align: center;
-  margin: 0 8px;
+  flex-shrink: 0;
 }
 
 .card img {
@@ -79,99 +79,26 @@
   font-size: 14px;
 }
 
-/* Slider overrides */
-.slick-slide {
-  padding: 0 5px;
-}
-
 /* Player bar */
-.bottom-player {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: #181818;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 20px;
-  border-top: 1px solid #333;
-  z-index: 1000;
-}
-
-.bottom-player audio {
-  width: 300px;
-}
-
-.song-info {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: #fff;
-}
-
-.song-info img {
-  width: 50px;
-  height: 50px;
-  object-fit: cover;
-  border-radius: 4px;
-}
-
 .player-bar {
   position: fixed;
   bottom: 0;
-  left: 240px; /* Ancho del sidebar */
-  right: 0;
-  height: 80px;
-  background-color: #000;
-  color: white;
-  display: flex;
-  align-items: center;
-  padding: 10px 20px;
-  border-top: 1px solid #333;
-  z-index: 999;
-  justify-content: space-between;
-}
-
-.player-info {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-.player-cover {
-  width: 50px;
-  height: 50px;
-  border-radius: 4px;
-}
-
-.player-title {
-  font-size: 16px;
-  font-weight: bold;
-}
-
-.audio-player {
-  width: 300px;
-}
-.player-bar {
-  position: fixed;
-  bottom: 0;
-  left: 240px; /* ancho del sidebar */
+  left: 240px;
   right: 0;
   height: 80px;
   background-color: #000;
   border-top: 1px solid #333;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 0 20px;
-  z-index: 100;
+  z-index: 999;
 }
 
 .player-info {
   display: flex;
   align-items: center;
   gap: 15px;
-  color: white;
 }
 
 .player-cover {
@@ -186,7 +113,76 @@
   font-size: 16px;
 }
 
-.audio-player {
-  margin-left: auto;
-  width: 300px;
+.player-controls {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+.player-controls button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+/* Artists section */
+.artists-section {
+  margin: 0 !important;
+  padding: 0 !important;
+  flex-shrink: 0;
+}
+
+.artists-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.show-all {
+  color: #aaa;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.artists-container {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+}
+
+.artists-container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.artists-container::-webkit-scrollbar-thumb {
+  background: #444;
+  border-radius: 4px;
+}
+
+.artist-card {
+  text-align: center;
+  width: 120px;
+  flex-shrink: 0;
+}
+
+.artist-card img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.artist-name {
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.artist-role {
+  color: #aaa;
+  font-size: 14px;
 }

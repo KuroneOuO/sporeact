@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
-import Slider from "react-slick";
+import React, { useState, useRef } from 'react';
+import Slider from 'react-slick';
 import Sidebar from './componentes/menu/Sidebar';
 import './App.css';
 import "slick-carousel/slick/slick.css"; 
@@ -39,31 +39,46 @@ const trendingSongs = [
   }
 ];
 
+const favoriteArtists = [
+  {
+    name: "Paulo Londra",
+    img: "https://i.scdn.co/image/ab676161000051743deda947e22df7dd3c8fe2c2"
+  },
+  {
+    name: "Trueno",
+    img: "https://www.soundpark.news/img/2022/05/17/trueno_damon_albarn_gorillaz.jpg?__scale=w:1200,h:1200,t:2"
+  },
+  {
+    name: "Nicki Nicole",
+    img: "https://static.wikia.nocookie.net/youtubepedia/images/b/bb/Nicki_nicole.jpg/revision/latest?cb=20220722001729&path-prefix=es"
+  },
+  {
+    name: "Rels B",
+    img: "https://i.scdn.co/image/ab67616d0000b273b5f2039fff32ee270655a218"
+  }
+];
+
 function App() {
   const [currentSong, setCurrentSong] = useState(null);
-  const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef(null);
 
   const handlePlay = (song) => {
     setCurrentSong(song);
+    setTimeout(() => {
+      if (audioRef.current) {
+        audioRef.current.play();
+      }
+    }, 100);
   };
 
-  useEffect(() => {
-    if (audioRef.current && currentSong) {
-      audioRef.current.load();
-      audioRef.current.play();
-      setIsPlaying(true);
-    }
-  }, [currentSong]);
+  const handlePrev = () => {
+    const currentIndex = trendingSongs.findIndex(song => song === currentSong);
+    if (currentIndex > 0) handlePlay(trendingSongs[currentIndex - 1]);
+  };
 
-  const togglePlayback = () => {
-    if (!audioRef.current) return;
-    if (isPlaying) {
-      audioRef.current.pause();
-    } else {
-      audioRef.current.play();
-    }
-    setIsPlaying(!isPlaying);
+  const handleNext = () => {
+    const currentIndex = trendingSongs.findIndex(song => song === currentSong);
+    if (currentIndex < trendingSongs.length - 1) handlePlay(trendingSongs[currentIndex + 1]);
   };
 
   const settings = {
@@ -76,7 +91,7 @@ function App() {
       { breakpoint: 1024, settings: { slidesToShow: 3 } },
       { breakpoint: 768, settings: { slidesToShow: 2 } },
       { breakpoint: 480, settings: { slidesToShow: 1 } },
-    ],
+    ]
   };
 
   return (
@@ -94,6 +109,22 @@ function App() {
             ))}
           </Slider>
         </section>
+
+        <section className="artists-section">
+          <div className="artists-header">
+            <h3>Tus artistas favoritos</h3>
+            <span className="show-all">Mostrar todos</span>
+          </div>
+          <div className="artists-container">
+            {favoriteArtists.map((artist, index) => (
+              <div className="artist-card" key={index}>
+                <img src={artist.img} alt={artist.name} />
+                <div className="artist-name">{artist.name}</div>
+                <div className="artist-role">Artista</div>
+              </div>
+            ))}
+          </div>
+        </section>
       </main>
 
       {currentSong && (
@@ -102,18 +133,14 @@ function App() {
             <img src={currentSong.img} alt={currentSong.title} className="player-cover" />
             <span className="player-title">{currentSong.title}</span>
           </div>
-
           <div className="player-controls">
-            <button className="play-pause-btn" onClick={togglePlayback}>
-              {isPlaying ? '⏸️ Pausar' : '▶️ Reproducir'}
+            <button onClick={handlePrev}>⏮</button>
+            <button onClick={() => audioRef.current?.paused ? audioRef.current.play() : audioRef.current.pause()}>
+              {audioRef.current?.paused ? '▶️' : '⏸'}
             </button>
+            <button onClick={handleNext}>⏭</button>
           </div>
-
-          {/* audio oculto */}
-          <audio ref={audioRef}>
-            <source src={currentSong.audio} type="audio/mpeg" />
-            Tu navegador no soporta el elemento de audio.
-          </audio>
+          <audio ref={audioRef} src={currentSong.audio} autoPlay />
         </div>
       )}
     </div>
